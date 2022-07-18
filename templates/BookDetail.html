@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Book Details{% endblock title %}
+
+{% block style %}
+#example2 {
+  border: 1px solid;
+  padding: 10px;
+  box-shadow: 10px 10px #3e3e3e;
+  border-radius: 10px;
+}
+body {
+    background-color: black;
+    color: white;
+}
+#hr1 {
+    width:100%;
+    background-color:red;
+    height:1px;
+    border: none;
+}
+#hr2 {
+    width:100%;
+    background-color:green;
+    height:1px;
+    border: none;
+}
+{% endblock style %}
+
+{% block body %}
+<div class="container my-3">
+ <a href="javascript:window.history.back();" class="btn btn-outline-primary mt-3" style="font-size: 1.2rem;">👈Back</a>
+ <br><br>
+ <div class="row">
+
+  <div class="col-sm-5 text-center align-self-center">
+   <img src="{{book.front_pic.url}}" alt="" style="height:300px" class="img-fluid img-thumbnail">
+  </div>
+  <div class="col-sm-6 offset-sm-1">
+
+   <h4>Title: {{book.name}}</h4>
+   <hr id="hr1">
+   <h4>Author: {{book.author_id}}</h4>
+   <hr id="hr1">
+   <h4>Founded on: {{book.founded_on}}</h4>
+   <hr id="hr1">
+   <h4>Book Description:</h4> <br> <p>{{book.book_desc}}</p> <br>
+   <hr id="hr1">
+   <h4 style="display: inline;">Rs.{{book.price}}</h4>
+
+    <a class="btn btn-warning" href="{{book.file.url}}" target="_blank" style="display: inline; margin-left: 60px;">View</a>
+    <a class="btn btn-success" href="{{book.file.url}}" download="Book-Sample" style="display: inline; margin-left: 30px;">Download</a>
+    <hr id="hr1">
+  </div>
+ </div>
+
+ <hr style="border-top: dotted 5px; background-color: black; padding-top: 20px;
+ margin-top: 40px; margin-bottom: 40px;">
+
+    <div>
+        <h2 class="mb-4" style="color: orange;">COMMENTS</h2>
+        <p>Total number of comments: <span class="text-danger">{{book.comments.count}}</span></p>
+
+        <div class="row">
+            <div class="col-md-5">
+                <div id="example2">
+                <h2 style="color: green;">Add Comment:</h2>
+                <form  method="POST">
+                    {% csrf_token %}
+                    {{form.as_p}}
+                        <button class="btn btn-success">Submit</button>
+                </form>
+                </div>
+            </div>
+
+            <div class="col-md-7">
+                {% for comment in book.comments.all %}
+                <div class="comments">
+                    <div class="comments-details">
+                        <hr id="hr2">
+                        <h5 class="comment-user-name text-bold">{{comment.name}} ({{comment.email}}) on {{comment.created | date:"F d Y"}} :</h5>
+                        <p>Rated: {{comment.rating}} out of 10</p>
+                        <p>commented: {{comment.body}}</p>
+
+                    </div>
+                </div>
+                {% empty %}
+                    <p style="color:red">there are no comments</p>
+                {% endfor %}
+                <hr id="hr2">
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

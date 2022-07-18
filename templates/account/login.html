@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap4.min.js"></script>
+{% endblock head %}
+
+{% block style %}
+.errorlist {
+            color:red;
+           }
+
+input[type=text], input[type=password]
+{
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+    border-radius: 5px;
+}
+
+label[for="id_username"],
+label[for="id_password"]
+{
+ display:none;
+}
+{% endblock style %}
+
+{% block body %}
+<div class="shadow p-5" style="margin-bottom: 194px;">
+    <h1>
+        Login Form
+    </h1>
+    <hr>
+    {% include "message.html" %}
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit" class="btn btn-primary">
+            Login
+        </button>
+
+    </form>
+
+    <br>
+    <u>Create an account: <a href="{% url 'account:register' %}"> Register</a></u>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+document.getElementById("id_username").setAttribute("placeholder", "Email");
+document.getElementById("id_password").setAttribute("placeholder", "Password");
+
+</script>
+{% endblock %}

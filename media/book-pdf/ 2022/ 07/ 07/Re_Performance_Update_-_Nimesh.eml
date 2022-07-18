@@ -1,0 +1,784 @@
+Return-Path: <hr@acquaintsoft.com>
+X-Original-To: nimesh.garaniya@acquaintsoft.com
+Delivered-To: x22413487@pdx1-sub0-mail-mx203.dreamhost.com
+Received: from postfix-inbound-v2-3.inbound.mailchannels.net (inbound-egress-5.mailchannels.net [199.10.31.237])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by pdx1-sub0-mail-mx203.dreamhost.com (Postfix) with ESMTPS id 4LYd0C3Z2yz5Vqb
+	for <nimesh.garaniya@acquaintsoft.com>; Thu, 30 Jun 2022 05:28:11 -0700 (PDT)
+Received: from inbound-trex-1 (unknown [127.0.0.6])
+	by postfix-inbound-v2-3.inbound.mailchannels.net (Postfix) with ESMTP id 1F7C2402CC
+	for <nimesh.garaniya@acquaintsoft.com>; Thu, 30 Jun 2022 12:28:11 +0000 (UTC)
+ARC-Seal: i=3; s=arc-2022; d=mailchannels.net; t=1656592090; a=rsa-sha256;
+	cv=pass;
+	b=yQcccV/SryFhiEqTyWRdddrmL4Lg5f7ZnPXM6m8YVn8wJuC3w5UWOMDHSKfAlqj6OidNdr
+	SqgaRBLwBWno04YCFnM7aIOs9oc/Xb5DuRukJJC8QUp4mJiAljrGGut7cbMZtAKlurT0LH
+	91I6Mb/sfYJdLVLQbetFL6dVVDYFFdg6o4l2ada9s0sQ1mB0v5CcAplVSteYWme/EKY6fL
+	nniBktF8aoY3WPjAGfCqRtqfGET8umfPriemY23o2FqeKx6Y3MvxQaUUOzv7JpE6eY1vFr
+	WvYS06hrUAa1/zjju9AnF5aAHHiS8XO6Ynt7DtA2yVRmj1y5m1v+82h3T/+WtQ==
+ARC-Message-Signature: i=3; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1656592090;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=KTiSIXcVzxo3xf41qmp3nJ/93xOfaFu2kMX1S6bJ+0c=;
+	b=IPKHK0GPb0SOP+P9wqtLNRZrPydzG/aT5ZHmZIxQwLzM1hztblOORC6V4rmI4iAK3G03wg
+	pAfZzdiFlGRNTr50s1TPb5HVEIalbvnePTcp8tVxq/vKUaWT1baYfF7TAxxj5YiSBSqXLZ
+	+DBbhQRey64usfCQejbNHD73Z4gNpeMNPrb7tmPaVI2u31s9OgGvqe+SPMycxvxuJn2H7m
+	D8ETfDYaRry5zFT+ItOwRb1D+o7WGrQoVMjHvHEZhKQhNRE8XOr7k1CQWZ+lRMUUIr7ieP
+	EUy02YIW3czJYq0c05VAEe4kqyj4YVKs44hDFqP6uBZb5XTOKFI8ctpt8lwkvg==
+ARC-Authentication-Results: i=3;
+	inbound-rspamd-7885cf5f5-4bfnf;
+	arc=pass ("mailchannels.net:s=arc-2022:i=2")
+X-Message-ID: Wl2h5sYzajBXciy15wNuM8PJ
+Received: from inbound-splitter.mailchannels.net ([UNAVAILABLE]. [127.0.0.6])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.116.40.195 (trex/6.7.1);
+	Thu, 30 Jun 2022 12:28:11 +0000
+Authentication-Results: inbound.mailchannels.net;
+ spf=pass smtp.mailfrom=hr@acquaintsoft.com;
+ dkim=temperror header.d=acquaintsoft.com;
+ dmarc=none
+Received-SPF: pass (dmarc-service-7cb968fcf4-4q5s5: localhost is always
+ allowed.) client-ip=127.0.0.6; envelope-from=hr@acquaintsoft.com;
+ helo=inbound-splitter.mailchannels.net;
+Received: from inbound-trex-2 (unknown [127.0.0.6])
+	by postfix-inbound-splitter-v2-0.localdomain (Postfix) with ESMTP id 2DD4A4004A;
+	Thu, 30 Jun 2022 12:28:07 +0000 (UTC)
+ARC-Seal: i=2; s=arc-2022; d=mailchannels.net; t=1656592086; a=rsa-sha256;
+	cv=pass;
+	b=zAPw62QjW2DnRnCKTTKzplpqCoogsBExOD1lUzU/5K8FmPovBysSQPR7y8A2dsVCqs9fLy
+	f9MpUXq22V+EIB0uU+cZicCUka55SfYm3QxWXcMPI00kNi5LUi/6nuwdSwrJx+Oa1rL+q/
+	fGB2fgFxfH0WwLBBtBMV+2YX+WMrHy3sBuYAjzN9pjTF+9qpk+PSOp1prvDM5hjqIPoHBc
+	7tlWyfLZcaXeysE+OwIsnE58KMTVWFjzp62RDLDWGWhahCO/CXIDfE4zNoPZTGmPByJs9R
+	96kq7lePUlquqrDy99qoL6ZgfrJ9uS25NBSKd8sk729YnqWOWoupufYBBOdXDg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1656592086;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=KTiSIXcVzxo3xf41qmp3nJ/93xOfaFu2kMX1S6bJ+0c=;
+	b=PqzuekVW/BjFnyzNf9Noz4t3KhY/U9TeSembUIu9owpgLGP96VhHR+ntJsUddVAaCSGIyl
+	4fkihri9/mOy00CHdDg2Spy+gboTrMXMkXsS7us1c2vqgX5kSxNq15LWMA9tsCQN96mALd
+	AXA8G+7ATfyfa+XKo18EQxukONb/Ou6sMP8GjffHNFp9K5gx7jrhkeDZs9g9dQvZ8vs+yu
+	w//LhQ7P7u/ajqz2sF4C7N18E0e1cmEogl/n4cTY+vTCrjrwT7VHgZ4UZjpUZqfvrbpaAt
+	YBrHKovrq+aur9O3lRoSvRggU5Nur6p726bRcNXb9mquCG3KWC2ee8I8VqekPQ==
+ARC-Authentication-Results: i=2;
+	inbound-rspamd-7885cf5f5-zpv5v;
+	arc=pass ("mailchannels.net:s=arc-2022:i=1")
+X-Message-ID: pbzg2MnPZlQ2WYD2xGcr0hux
+Received: from bumble.birch.relay.mailchannels.net
+ (bumble.birch.relay.mailchannels.net [23.83.209.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
+	by 100.120.36.117 (trex/6.7.1);
+	Thu, 30 Jun 2022 12:28:07 +0000
+Authentication-Results: inbound.mailchannels.net;
+ spf=pass smtp.mailfrom=hr@acquaintsoft.com;
+ dkim=temperror header.d=acquaintsoft.com;
+ dmarc=none
+Received-SPF: pass (dmarc-service-7cb968fcf4-zwb9w: domain of acquaintsoft.com
+ designates 23.83.209.25 as permitted sender) client-ip=23.83.209.25;
+ envelope-from=hr@acquaintsoft.com; helo=bumble.birch.relay.mailchannels.net;
+X-Sender-Id: dreamhost|x-authsender|hr@acquaintsoft.com
+Received: from pdx1-sub0-mail-a248.dreamhost.com (unknown [127.0.0.6])
+	(Authenticated sender: dreamhost)
+	by relay.mailchannels.net (Postfix) with ESMTPA id 49F3CC25E4;
+	Thu, 30 Jun 2022 12:28:02 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1656592082; a=rsa-sha256;
+	cv=none;
+	b=rTFG2G7d0RJThUBfOZq53UHyIBT6X8Ur6ZdB/2Ze4TB95U86mehiP+P59hWRUQbfD/ao0r
+	Y9d7izSUH9dU0rdMiLyy68PPiY8oxLWdeoFXFjiUPJ6c+A07zZoYd1FP3BEPbWeLnINDM2
+	mPXlNwMU/aKcDqc1Ttg9w0yTk//7KKlIb2KXpBlqFm5bWhpU069q4JSIW0Ia5sFl/FUYf3
+	rAp2tiAJ06dQCfWKR6cTCpmnD5jBX7i+1aCPptAdGwlDH1fy1D4UFkZKrtubu2XSEN7Z0X
+	TvaKDj3qBMiaPe45Ms8W78gInvCsluptz4smyY33jS7ZjKYUWQEBj4GD3DcqBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1656592082;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=KTiSIXcVzxo3xf41qmp3nJ/93xOfaFu2kMX1S6bJ+0c=;
+	b=fUMqG+7szQXssnqQGMCTd9AbZxkhqGy5pT8ALoIN0yqNmQh74F19eGeLLjlHGSRBpfzA7v
+	6c6MyJBEqYh4U+zwZB6AiczjEaeWU1DgeORdM97C+kARUtXlZ2zhYjXJZsI1X2h+lGiOvk
+	5eUTf9SAzKInp2enUHe6HQNkuroRrc/RxLdyzmAS/v7L8YLAQNSn5O0WndO8diuF/5yY7x
+	iL5YYav5pv98rR69Fd4ZI7oTFMD8MLgvMGV25aPP3lt7dar6LFjFN0aQdtU8rUHY2k0oJh
+	di7Q+JilObFSYE4JKUWXLjV0uURFELSobsywqAQnG/3r/ObuWimor8wQ+PlTeA==
+ARC-Authentication-Results: i=1;
+	rspamd-689699966c-zbn45;
+	auth=pass smtp.auth=dreamhost smtp.mailfrom=hr@acquaintsoft.com
+X-Sender-Id: dreamhost|x-authsender|hr@acquaintsoft.com
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|hr@acquaintsoft.com
+X-MailChannels-Auth-Id: dreamhost
+X-Thread-Stupid: 586b5086049e1260_1656592082582_1164586558
+X-MC-Loop-Signature: 1656592082582:682788975
+X-MC-Ingress-Time: 1656592082582
+Received: from pdx1-sub0-mail-a248.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.127.95.103 (trex/6.7.1);
+	Thu, 30 Jun 2022 12:28:02 +0000
+Received: from [192.168.1.91] (unknown [202.131.117.82])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	(Authenticated sender: hr@acquaintsoft.com)
+	by pdx1-sub0-mail-a248.dreamhost.com (Postfix) with ESMTPSA id 4LYczz65VBz32;
+	Thu, 30 Jun 2022 05:27:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acquaintsoft.com;
+	s=dreamhost; t=1656592082;
+	bh=KTiSIXcVzxo3xf41qmp3nJ/93xOfaFu2kMX1S6bJ+0c=;
+	h=Content-Type:Date:Subject:From:To:Cc;
+	b=pTWshGW0/eqeO1PZFTifbTLh3z2Kvi5tO9I9a3f4TxlRlxNFYPIbyEtyNUbSu3/uF
+	 xeaspp41zNCX3vR6fAoMVWIvzu7pB/f2V0uYPhFgGqmm2be1x8HS5NlL7JtJUncknd
+	 3m673/DXltU0r+XZpqb3QV1DMpBhCTuu4RWQkAA9oamVIGFIi4Oz0g1H+DzU4IcVAA
+	 GIX5PQEYY1c/obSUs366jgwOSa0DWoWALTl3M9Tjh4E3QJn1ZOrA2oQOBxWRP1+ZZM
+	 xUoa8fMbIB4H6bgmVpbqdnQKp2ZlQu9M/w0Wsz2T9BAnN7Oyzkd4SDXBvTaMkcoh2u
+	 OOgzQn0e9FIpQ==
+Content-Type: multipart/alternative;
+ boundary="------------20efY7aX6hgzBldELDmuOBw8"
+Message-ID: <7ebd8e20-9d20-66d7-9863-17fa584a0afb@acquaintsoft.com>
+Date: Thu, 30 Jun 2022 17:57:56 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: Performance Update - Nimesh
+Content-Language: en-US
+From: Acquaint HR <hr@acquaintsoft.com>
+To: nimesh.garaniya@acquaintsoft.com
+Cc: Manish Patel <manish@acquaintsoft.com>,
+ Alpesh Nakrani <alpesh@acquaintsoft.com>,
+ Mukesh Ram <mukesh@acquaintsoft.com>
+References: <af94c42e-dc55-6a02-51fd-9c9c45f2c77f@acquaintsoft.com>
+In-Reply-To: <af94c42e-dc55-6a02-51fd-9c9c45f2c77f@acquaintsoft.com>
+
+This is a multi-part message in MIME format.
+--------------20efY7aX6hgzBldELDmuOBw8
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Hello Nimesh,
+
+Greetings!
+
+As per our 2nd meeting, we are unable to get the required 
+output/performance/improvements from you after we gave intimation on 
+your performance! Due to this company is revising your salary to INR 
+5,000/- per month from INR 10,000/- Per Month from 1st June 2022.
+
+
+Also, you have highlighted that your interest or work might change due 
+to coding syntax. We would like to share our opinion, you have already 
+earned a Bug Bounty reward for testing. You can try your skills in 
+software testing and make your successful career in manual and 
+automation testing.
+
+You can connect us for more details.
+
+
+Thank you!
+
+
+On 15/06/22 6:54 pm, Acquaint HR wrote:
+>
+> Hello Nimesh,
+>
+> As per our F2F meeting, please find the points we discuss for your 
+> improvement. We will evaluate your performance for the next 15 days, 
+> if there are missing improvements then the company will initiate the 
+> intimation process.
+>
+> Here is your scope of improvements
+>
+> 1 - Avoid using mobile phone's on-premises
+>
+> 2 - Learn the basics of HTML and JS.
+>
+> 3 - You know Python but still make mistakes
+>
+> 4 - Learn Time Management
+>
+> 5 - Not asking for any help officially but making your task done with 
+> help of others
+>
+> 6 - Same instruction is given multiple times but makes the same mistakes
+>
+> Kindly work on the above points to improve your performance.
+>
+> Let us know if you need any help from us.
+>
+> Thank you,
+>
+> HR Team
+>
+> Acquaint Softtech Pvt Ltd.
+>
+--------------20efY7aX6hgzBldELDmuOBw8
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+  <head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF=
+-8">
+  </head>
+  <body>
+    <p id=3D"isPasted" style=3D"margin: 0px; padding: 0px; word-break:
+      break-word; color: rgb(65, 65, 65); font-family: sans-serif;
+      font-size: 16px; font-style: normal; font-variant-ligatures:
+      normal; font-variant-caps: normal; font-weight: 400;
+      letter-spacing: normal; orphans: 2; text-align: left; text-indent:
+      0px; text-transform: none; white-space: normal; widows: 2;
+      word-spacing: 0px; -webkit-text-stroke-width: 0px;
+      background-color: rgb(255, 255, 255); text-decoration-thickness:
+      initial; text-decoration-style: initial; text-decoration-color:
+      initial;">Hello Nimesh,</p>
+    <p style=3D"margin: 0px; padding: 0px; word-break: break-word; color:=
+
+      rgb(65, 65, 65); font-family: sans-serif; font-size: 16px;
+      font-style: normal; font-variant-ligatures: normal;
+      font-variant-caps: normal; font-weight: 400; letter-spacing:
+      normal; orphans: 2; text-align: left; text-indent: 0px;
+      text-transform: none; white-space: normal; widows: 2;
+      word-spacing: 0px; -webkit-text-stroke-width: 0px;
+      background-color: rgb(255, 255, 255); text-decoration-thickness:
+      initial; text-decoration-style: initial; text-decoration-color:
+      initial;">Greetings!</p>
+    <p style=3D"margin: 0px; padding: 0px; word-break: break-word; color:=
+
+      rgb(65, 65, 65); font-family: sans-serif; font-size: 16px;
+      font-style: normal; font-variant-ligatures: normal;
+      font-variant-caps: normal; font-weight: 400; letter-spacing:
+      normal; orphans: 2; text-align: left; text-indent: 0px;
+      text-transform: none; white-space: normal; widows: 2;
+      word-spacing: 0px; -webkit-text-stroke-width: 0px;
+      background-color: rgb(255, 255, 255); text-decoration-thickness:
+      initial; text-decoration-style: initial; text-decoration-color:
+      initial;">As per our 2nd meeting, we are unable to get the
+      required output/performance/improvements from you after we gave
+      intimation on your performance! Due to this company is revising
+      your salary to INR 5,000/- per month from INR 10,000/- Per Month
+      from 1st June 2022.</p>
+    <p style=3D"margin: 0px; padding: 0px; word-break: break-word; color:=
+
+      rgb(65, 65, 65); font-family: sans-serif; font-size: 16px;
+      font-style: normal; font-variant-ligatures: normal;
+      font-variant-caps: normal; font-weight: 400; letter-spacing:
+      normal; orphans: 2; text-align: left; text-indent: 0px;
+      text-transform: none; white-space: normal; widows: 2;
+      word-spacing: 0px; -webkit-text-stroke-width: 0px;
+      background-color: rgb(255, 255, 255); text-decoration-thickness:
+      initial; text-decoration-style: initial; text-decoration-color:
+      initial;"><br style=3D"margin: 0px; padding: 0px; word-break:
+        break-word;">
+    </p>
+    <p style=3D"margin: 0px; padding: 0px; word-break: break-word; color:=
+
+      rgb(65, 65, 65); font-family: sans-serif; font-size: 16px;
+      font-style: normal; font-variant-ligatures: normal;
+      font-variant-caps: normal; font-weight: 400; letter-spacing:
+      normal; orphans: 2; text-align: left; text-indent: 0px;
+      text-transform: none; white-space: normal; widows: 2;
+      word-spacing: 0px; -webkit-text-stroke-width: 0px;
+      background-color: rgb(255, 255, 255); text-decoration-thickness:
+      initial; text-decoration-style: initial; text-decoration-color:
+      initial;">Also, you have highlighted that your interest or work
+      might change due to coding syntax. We would like to share our
+      opinion, you have already earned a Bug Bounty reward for testing.
+      You can try your skills in software testing and make your
+      successful career in manual and automation testing.=C2=A0</p>
+    <p style=3D"margin: 0px; padding: 0px; word-break: break-word; color:=
+
+      rgb(65, 65, 65); font-family: sans-serif; font-size: 16px;
+      font-style: normal; font-variant-ligatures: normal;
+      font-variant-caps: normal; font-weight: 400; letter-spacing:
+      normal; orphans: 2; text-align: left; text-indent: 0px;
+      text-transform: none; white-space: normal; widows: 2;
+      word-spacing: 0px; -webkit-text-stroke-width: 0px;
+      background-color: rgb(255, 255, 255); text-decoration-thickness:
+      initial; text-decoration-style: initial; text-decoration-color:
+      initial;">=C2=A0</p>
+    <p style=3D"margin: 0px; padding: 0px; word-break: break-word; color:=
+
+      rgb(65, 65, 65); font-family: sans-serif; font-size: 16px;
+      font-style: normal; font-variant-ligatures: normal;
+      font-variant-caps: normal; font-weight: 400; letter-spacing:
+      normal; orphans: 2; text-align: left; text-indent: 0px;
+      text-transform: none; white-space: normal; widows: 2;
+      word-spacing: 0px; -webkit-text-stroke-width: 0px;
+      background-color: rgb(255, 255, 255); text-decoration-thickness:
+      initial; text-decoration-style: initial; text-decoration-color:
+      initial;">You can connect us for more details.</p>
+    <p style=3D"margin: 0px; padding: 0px; word-break: break-word; color:=
+
+      rgb(65, 65, 65); font-family: sans-serif; font-size: 16px;
+      font-style: normal; font-variant-ligatures: normal;
+      font-variant-caps: normal; font-weight: 400; letter-spacing:
+      normal; orphans: 2; text-align: left; text-indent: 0px;
+      text-transform: none; white-space: normal; widows: 2;
+      word-spacing: 0px; -webkit-text-stroke-width: 0px;
+      background-color: rgb(255, 255, 255); text-decoration-thickness:
+      initial; text-decoration-style: initial; text-decoration-color:
+      initial;"><br>
+    </p>
+    <p style=3D"margin: 0px; padding: 0px; word-break: break-word; color:=
+
+      rgb(65, 65, 65); font-family: sans-serif; font-size: 16px;
+      font-style: normal; font-variant-ligatures: normal;
+      font-variant-caps: normal; font-weight: 400; letter-spacing:
+      normal; orphans: 2; text-align: left; text-indent: 0px;
+      text-transform: none; white-space: normal; widows: 2;
+      word-spacing: 0px; -webkit-text-stroke-width: 0px;
+      background-color: rgb(255, 255, 255); text-decoration-thickness:
+      initial; text-decoration-style: initial; text-decoration-color:
+      initial;">Thank you!</p>
+    <p><br>
+    </p>
+    <div class=3D"moz-cite-prefix">On 15/06/22 6:54 pm, Acquaint HR wrote=
+:<br>
+    </div>
+    <blockquote type=3D"cite"
+      cite=3D"mid:af94c42e-dc55-6a02-51fd-9c9c45f2c77f@acquaintsoft.com">=
+
+      <meta http-equiv=3D"content-type" content=3D"text/html; charset=3DU=
+TF-8">
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;">Hello Nimesh,</p>
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;">As per our F2F meeting, please find th=
+e points we discuss for your improvement. We will evaluate your performan=
+ce for the next 15 days, if there are missing improvements then the compa=
+ny will initiate the intimation process. </p>
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;"> </p>
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;"> Here is your scope of improvements</p=
+>
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;"> </p>
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;"> 1 - Avoid using mobile phone's on-pre=
+mises</p>
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;"> 2 - Learn the basics of HTML and JS.<=
+/p>
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;"> 3 - You know Python but still make mi=
+stakes</p>
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;"> 4 - Learn Time Management </p>
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;"> 5 - Not asking for any help officiall=
+y but making your task done with help of others</p>
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;"> 6 - Same instruction is given multipl=
+e times but makes the same mistakes</p>
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;">
+</p>
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;">Kindly work on the above points to imp=
+rove your performance. </p>
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;"> </p>
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;"> Let us know if you need any help from=
+ us.</p>
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;"> </p>
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;"> Thank you,</p>
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;"> </p>
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;"> HR Team</p>
+      <p style=3D"box-sizing: inherit; margin: 0px; padding: 0px; border:=
+ var(--artdeco-reset-base-border-zero); font-size: 16px; vertical-align: =
+var(--artdeco-reset-base-vertical-align-baseline); background-image: ; ba=
+ckground-position-x: ; background-position-y: ; background-size: ; backgr=
+ound-repeat-x: ; background-repeat-y: ; background-attachment: ; backgrou=
+nd-origin: ; background-clip: ; background-color: rgb(255, 255, 255); fon=
+t-weight: 400; --artdeco-reset-typography_getFontSize:1.6rem; --artdeco-r=
+eset-typography_getLineHeight:1.5; line-height: var(--artdeco-reset-typog=
+raphy_getLineHeight); color: rgba(0, 0, 0, 0.9); cursor: text; counter-re=
+set: list-1 0 list-2 0 list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-=
+8 0 list-9 0; font-family: -apple-system, system-ui, &quot;system-ui&quot=
+;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, &quot;Fira S=
+ans&quot;, Ubuntu, Oxygen, &quot;Oxygen Sans&quot;, Cantarell, &quot;Droi=
+d Sans&quot;, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, =
+&quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Lucida Gra=
+nde&quot;, Helvetica, Arial, sans-serif; font-style: normal; font-variant=
+-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; or=
+phans: 2; text-align: left; text-indent: 0px; text-transform: none; white=
+-space: pre-wrap; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; text-decoration-thickness: initial; text-decoration-style: initial=
+; text-decoration-color: initial;"> Acquaint Softtech Pvt Ltd.=C2=A0</p>
+    </blockquote>
+  </body>
+</html>
+
+--------------20efY7aX6hgzBldELDmuOBw8--
+
